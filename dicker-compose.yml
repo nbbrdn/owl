@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: owl
+      POSTGRES_USER: owl
+      POSTGRES_PASSWORD: owl
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://owl:owl@db:5432/owl
+    depends_on:
+      - db
+
+
+volumes:
+  postgres_data:
